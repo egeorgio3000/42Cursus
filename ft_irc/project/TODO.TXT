@@ -1,0 +1,76 @@
+REGISTRATION:
+[x] CAP  : OK pas géré par le serveur, envoie seulement 421
+[x] PASS : OK mais peut-etre un peu degueulasse, à reprendre avec registerUser
+[-] NICK : [x] OK regarder ce qui est legal et faire une fonction checkNickname()
+         : [ ] pendant la registration: ne pas fermer la connexion, envoyer 433 à irssi pour qu'il reponde avec nick_
+[x] USER : [x] OK boucler si username fait plusieurs mots
+[x] welcome RPLs : 001, 002, 003, 004, 005
+
+COMMANDES:
+[-] WHOIS: USER
+                : [x] OK pour l'instant, voir à l'avenir si besoin de plus de réponses
+           CHANNEL
+                : [ ] à faire
+[ ] MODE : USER
+                : [x] OK setter de mode pour user siwo
+                : [ ] /!\ If a user attempts to make themselves an operator using the "+o" flag, the attempt should be ignored. 
+         : CHANNEL
+                : [x] OK setter de mode pour channel opsitnmlbvk
+                : [ ] mode v à regarder (voice)
+                : [ ] /mode #chan -> doit afficher dans le channel : "15:39 -!- mode/#chan [+tCN]"
+[-] JOIN : [ ] pouvoir join avec un mdp (key)
+         : [ ] pouvoir join plusieurs channels en meme temps avec ou sans mdp (key)
+[x] TOPIC : [x] OK rajouter un check si user est operator
+[-] PRIVMSG : [x] broadcast l'arrivée et le départ d'un utilisateur à tous les autres
+            : [-] faire les messages privés entre utilisateurs
+[x] PART : tout revoir
+[x] WHO : user/channel à voir si on fait les douze mille options (non)
+[ ] KICK
+[ ] INVITE
+[ ] KILL
+[ ] BAN
+[x] MOTD
+[-] PING PONG : [ ] gérer /PING <target> dans PRIVMSG
+[x] QUIT
+[ ] LUSERS : à finir après les channels
+[ ] gérer si les commandes arrivent en bordel avec ctrl+D (voir sujet) com^Dman^Dd -> scanner les commandes avec signal?
+
+A FAIRE:
+[ ] création de channel
+[ ] serveur qui clean pas les fd quand une seule instance de irssi se connecte plusieurs fois au server et quitte avec un seul appel a QUIT: voir POLLERR et POLLHUP
+[ ] clean les channels si les users sont déconnectés
+[ ] modifier User, un bool operator par _channel
+[ ] droits
+[ ] opérateurs
+[ ] faire une liste des commandes utilisateur à coder
+[ ] faire une liste des commandes operateur à coder
+[ ] vérifier les throw, exit(), etc.
+[ ] mettre les utils dans leurs classes
+[x] split des commandes
+[x] supprimer un user sans tout péter
+[ ] enlever le deuxieme argument de isNickNameTaken
+
+A FAIRE ???:
+[ ] faire une fonction qui 1/créé une str avec RPL, 2/sendReply(), 3/user.deleteCommand()
+[ ] sortir setMode de User et Channel pour le mettre dans utils
+[ ] créér un namespace
+[ ] TCPserver: changer std::map<int, User> _users en std::vector<User> _users
+[ ] User: changer les commandes en std::map<std::string, std::vector<std::string>> _commands
+
+FIN DU PROJET:
+[ ] organisation des dossiers et du makefile
+(OPTIONNELS):
+[ ] couleurs dans la fenetre des infos serveur avec des define
+[ ] faire un message de bienvenue fun
+[ ] faire un MOTD fun
+
+
+/connect localhost 30000 pass nick
+
+# SOURCES
+RFC 2812:         https://www.rfc-editor.org/rfc/rfc2812
+MODERN IRC:       https://modern.ircdocs.horse/
+LISTE COMMANDES : https://en.wikipedia.org/wiki/List_of_Internet_Relay_Chat_commands
+LISTE COMMANDES : https://www.alien.net.au/irc/chanmodes.html
+
+FONCTIONNEMENT :  https://chi.cs.uchicago.edu/chirc/irc_examples.html
