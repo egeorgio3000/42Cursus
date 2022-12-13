@@ -6,7 +6,7 @@
 #include <vector>
 namespace ft {
     
-template<Typename T, class Allocator = std::allocator<T> >
+template<typename T, class Allocator = std::allocator<T> >
 class vector {
 public:
     //  types:
@@ -24,14 +24,44 @@ public:
     //typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
     // construct/destroy:
-    explicit vector::vector(const allocator_type &allocator = Allocator()) {}
-    explicit vector::vector(size_type n, const value_type& value = value_type(), const allocator_type &allocator = Allocator()) {}
+    explicit vector(const allocator_type &allocator = Allocator()) : _alloc(allocator), _size(0), _capacity(0), _p(NULL) {    }
+    explicit vector(size_type n, const value_type& value = value_type(), const allocator_type &allocator = Allocator()) : _alloc(allocator), _size(n), _capacity(n) {
+        _p = _alloc.allocate(n);
+        for (size_type i = 0; i < n; i++) {
+            _alloc.construct(_p, value);
+        }
+
+    }
     
-    template <Typename InputIterator>
-    vector::vector (InputIterator first, InputIterator last, const allocator_type &allocator = Allocator()) {}
-    vector::vector (vector<T, allocator_type> const& src) {}
+    template <typename InputIterator>
+    vector(InputIterator first, InputIterator last, const allocator_type &allocator = Allocator()) {}
+    vector(ft::vector<T, allocator_type> const& src) {}
+    ~vector() {}
 
+    //operators
+    ft::vector<T, allocator_type> &operator=(ft::vector<T, allocator_type> const &rhs) {}
 
+    //setters
+    template <class InputIterator>
+        void assign(InputIterator first, InputIterator last) {}
+    void assign(size_type n, const T& u) {}
+
+    //getters
+    allocator_type  get_allocator() const { return _alloc; }
+
+    //member functions
+    iterator insert(iterator position, const T& x);
+    void insert(iterator position, size_type n, const T& x);
+    template <class InputIterator>
+    void insert(iterator position, InputIterator first, InputIterator last);
+
+private:
+    allocator_type &_alloc;
+    size_type       _size;
+    size_type       _capacity;
+    pointeur        _p;
 
 
 };
+}
+#endif
