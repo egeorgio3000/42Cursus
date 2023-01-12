@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include "vector_iterator.hpp"
 namespace ft {
     
 template<typename T, class Allocator = std::allocator<T> >
@@ -12,8 +13,8 @@ public:
     //  types:
     typedef typename Allocator::reference reference;
     typedef typename Allocator::const_reference const_reference;
-    //typedef implementation defined iterator; 
-    //typedef implementation defined const_iterator; 
+    //typedef ft::vector_iterator iterator; 
+    //typedef ft::vector_iterator const_iterator; 
     typedef std::size_t size_type; 
     typedef std::ptrdiff_t difference_type;
     typedef T value_type;
@@ -34,7 +35,10 @@ public:
     }
     
     template <typename InputIterator>
-    vector(InputIterator first, InputIterator last, const allocator_type &allocator = Allocator()) {}
+    vector(InputIterator first, InputIterator last, const allocator_type &allocator = Allocator()) {
+        inputIterator it
+    }
+    
     vector(ft::vector<T, allocator_type> const& src) {}
     ~vector() {}
 
@@ -43,7 +47,7 @@ public:
 
     //setters
     template <class InputIterator>
-        void assign(InputIterator first, InputIterator last) {}
+    void assign(InputIterator first, InputIterator last) {}
     void assign(size_type n, const T& u) {}
 
     //getters
@@ -55,6 +59,16 @@ public:
     template <class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last);
 
+    // iterators:
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
+    reverse_iterator rbegin();
+    const_reverse_iterator rbegin() const;
+    reverse_iterator rend();
+    const_reverse_iterator rend() const;
+    
 private:
     allocator_type &_alloc;
     size_type       _size;
