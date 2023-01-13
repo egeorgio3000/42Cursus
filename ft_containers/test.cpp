@@ -1,35 +1,18 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-
+#include "vector.hpp"
 int main() {
-    std::allocator<int> alloc;
-    int *p = alloc.allocate(5);
- /*   alloc.construct(p, 1);
-    alloc.construct(p + 1, 2);
-    alloc.construct(p + 2, 3);
-    alloc.construct(p + 3, 4);
-    alloc.construct(p + 4, 5);
-    alloc.deallocate(p, 5);
-    p = alloc.allocate(8);
-    for (int i =0; i < 5; i++)
-        std::cout << *(p + i) << std::endl;*/
-    std::vector<int> vec(3,42);
-    std::vector<int>::iterator it;
-    //vec.assign(15, 4);
-   // vec.assign(3,8);
-    vec.reserve(4);
-    for (size_t i = 0; i < vec.size(); i++)
-        std::cout << vec[i] << " ";
-    std::cout << std::endl;
-    
-    std::cout << vec.capacity() << " " << vec.size() << std::endl;
-    it = vec.insert(vec.end(), 5,  7);
+    //std::allocator<int> alloc;
+    ft::vector<int>::size_type n = 9;
+    ft::vector<int> myvec(9, 2);
+    std::vector<int> stdvec(9, 2);
+    std::cout << myvec.size() << " " << stdvec.size() << std::endl;
+    std::cout << myvec.capacity() << " " << stdvec.capacity() << std::endl;
 
-    //std::cout << *it << " " << *(vec.end() - 1) << std::endl;
-    for (size_t i = 0; i < vec.size(); i++)
-        std::cout << vec[i] << " ";
-    std::cout << std::endl;
-    std::cout << vec.capacity() << " " << vec.size() << std::endl;
+    ft::vector<int>::iterator it1 = myvec.begin();
+    std::vector<int>::iterator it2 = stdvec.begin();
 
+    stdvec.erase(7);
+    return 0;
 }
