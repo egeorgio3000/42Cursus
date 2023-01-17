@@ -6,7 +6,7 @@
 #include <memory>
 #include <vector>
 #include <string>
-//#include "vector_iterator.hpp"
+#include "./iterators/vector_iterator.hpp"
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 
@@ -18,11 +18,11 @@ public:
     //  types:
     typedef typename Allocator::reference reference;
     typedef typename Allocator::const_reference const_reference;
-    typedef T* iterator; 
-    typedef const T* const_iterator; 
+    typedef T value_type;
+    typedef vector_iterator<value_type> iterator; 
+    typedef vector_iterator<const value_type> const_iterator; 
     typedef std::size_t size_type; 
     typedef std::ptrdiff_t difference_type;
-    typedef T value_type;
     typedef Allocator allocator_type;
     typedef typename Allocator::pointer pointer;
     typedef typename Allocator::const_pointer const_pointer;
@@ -139,13 +139,11 @@ public:
     bool empty() const { return(_size ? false : true); }
     size_type size() const { return _size; }
     size_type capacity() const { return _capacity; }
+
     void reserve( size_type new_cap ) {
         if ( new_cap > max_size() ) { throw std::length_error("vector::reserve"); }
         if ( new_cap > _capacity ) {
-          <<<<<<< HEAD
-=======
-            }
->>>>>>> refs/remotes/origin/master  pointer new_p = _alloc.allocate( new_cap );
+            pointer new_p = _alloc.allocate( new_cap );
             for (size_type i = 0; i < _size; i++) {
                 _alloc.construct(new_p + i, *(_p + i));
                 _alloc.destroy(_p + i);

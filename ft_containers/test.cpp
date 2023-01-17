@@ -26,11 +26,12 @@ int main() {
     std::vector<int> stdvec(9, 2);
     print_vector(myvec);
     print_vector(stdvec);
-    ft::vector<int>::iterator it1 = myvec.begin();
-    std::vector<int>::iterator it2 = stdvec.begin();
+    ft::vector<int>::iterator it1 = myvec.end();
+    std::vector<int>::iterator it2 = stdvec.end();
     myvec.push_back(3);
     stdvec.push_back(3);
     print_vector(myvec);
-    print_vector(stdvec);    
+    print_vector(stdvec);
+    std::cout << *(it1) << " " << *(it2) << std::endl;
     return 0;
 }
