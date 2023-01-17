@@ -34,7 +34,7 @@ public:
     explicit vector(size_type n, const value_type& value = value_type(), const allocator_type &allocator = Allocator()) : _alloc(allocator), _size(n), _capacity(n) {
         _p = _alloc.allocate(n);
         for (size_type i = 0; i < n; i++) {
-            _alloc.construct(_p, value);
+            _alloc.construct(_p + i, value);
         }
 
     }
@@ -56,7 +56,15 @@ public:
     ~vector() { _alloc.deallocate(_p, _capacity); }
 
     //operators
-    ft::vector<T, allocator_type> &operator=(ft::vector<T, allocator_type> const &rhs) {}
+    ft::vector<T, allocator_type> &operator=(ft::vector<T, allocator_type> const &rhs) {
+        clear();
+        _alloc.deallocate(_p, _capacity);
+        _p = _alloc.allocate(rhs.size());
+        _size = rhs.size();
+        _capacity = rhs.capacity();
+        for (size_type i = 0; i < rhs.size(); i++)
+            _alloc.construct(_p + i, rhs[i]);
+    }
 
     //setters
     template <class InputIterator>
@@ -114,25 +122,30 @@ public:
     iterator erase( iterator first, iterator last) {
         size_type lengh = last - first;
     }
+
     void push_back(const T&value) {
         if ( _size + 1 > _capacity ) {
             if (!_capacity)
                 reserve(1);
-            else
+            else {
                 reserve(_capacity * 2);
-        }
+            }
         _alloc.construct(this->end(), value);
         _size += 1;
+        }
     }
         //capacity
-    size_t max_size() const { return _alloc.max_size(); }
+    size_type max_size() const { return _alloc.max_size(); }
     bool empty() const { return(_size ? false : true); }
-    size_t size() const { return _size; }
-    size_t capacity() const { return _capacity; }
+    size_type size() const { return _size; }
+    size_type capacity() const { return _capacity; }
     void reserve( size_type new_cap ) {
         if ( new_cap > max_size() ) { throw std::length_error("vector::reserve"); }
         if ( new_cap > _capacity ) {
-            pointer new_p = _alloc.allocate( new_cap );
+          <<<<<<< HEAD
+=======
+            }
+>>>>>>> refs/remotes/origin/master  pointer new_p = _alloc.allocate( new_cap );
             for (size_type i = 0; i < _size; i++) {
                 _alloc.construct(new_p + i, *(_p + i));
                 _alloc.destroy(_p + i);
