@@ -120,9 +120,9 @@ public:
                 reserve(1);
             else
                 reserve(_capacity * 2);
-            _alloc.construct(this->end(), value);
-            _size += 1;
         }
+        _alloc.construct(this->end(), value);
+        _size += 1;
     }
         //capacity
     size_t max_size() const { return _alloc.max_size(); }
