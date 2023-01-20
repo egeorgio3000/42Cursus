@@ -7,10 +7,11 @@ namespace ft {
 template<typename Iter>
 class reverse_iterator {
     public:
-    typename typedef ft::iterator_traits<Iter>::value_type value_type;
-    typename typedef ft::iterator_traits<Iter>::difference_type difference_type;
-    typename typedef ft::iterator_traits<Iter>::pointer pointer;
-    typename typedef ft::iterator_traits<Iter>::reference reference;
+    typedef typename ft::iterator_traits<Iter>::value_type value_type;
+    typedef typename ft::iterator_traits<Iter>::difference_type difference_type;
+    typedef typename ft::iterator_traits<Iter>::pointer pointer;
+    typedef typename ft::iterator_traits<Iter>::reference reference;
+    typedef typename ft::iterator_traits<Iter>::iterator_category iterator_category;
 
     reverse_iterator() : _it() {}
     reverse_iterator( reverse_iterator<Iter> const &it ) : _it(it) {}

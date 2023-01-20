@@ -44,6 +44,7 @@ public:
         InputIterator it = first;
         for(; it != last; it++)
             this->push_back(*it);
+        _capacity = last - first;
     }
     
     vector(ft::vector<T, allocator_type> const& src) {
@@ -61,9 +62,11 @@ public:
         _alloc.deallocate(_p, _capacity);
         _p = _alloc.allocate(rhs.size());
         _size = rhs.size();
-        _capacity = rhs.capacity();
+        if (_capacity < rhs.capacity())
+            _capacity = rhs.capacity();
         for (size_type i = 0; i < rhs.size(); i++)
             _alloc.construct(_p + i, rhs[i]);
+        return (*this);
     }
 
     //setters
@@ -130,7 +133,7 @@ public:
             else {
                 reserve(_capacity * 2);
             }
-        _alloc.construct(this->end(), value);
+        _alloc.construct(&(*this->end()), value);
         _size += 1;
         }
     }
@@ -182,7 +185,7 @@ public:
 
 
         // iterators:
-    iterator begin() { return iterator(_p); }
+    iterator begin()  { return iterator(_p); }
     const_iterator begin() const { return const_iterator(_p); }
     iterator end() { return iterator(_p + _size); }
     const_iterator end() const { return const_iterator(_p + _size); }

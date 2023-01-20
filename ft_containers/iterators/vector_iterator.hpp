@@ -7,12 +7,12 @@ namespace ft {
 
 template<typename T>
 class vector_iterator {
-    public:
-    typename typedef ft::iterator_traits<T*>::value_type value_type;
-    typename typedef ft::iterator_traits<T*>::difference_type difference_type;
-    typename typedef ft::iterator_traits<T*>::pointer pointer;
-    typename typedef ft::iterator_traits<T*>::reference reference;
-    typename typedef ft::iterator_traits<T*>::iterator_category iterator_category;
+public:
+    typedef typename ft::iterator_traits<T*>::value_type value_type;
+    typedef typename ft::iterator_traits<T*>::difference_type difference_type;
+    typedef typename ft::iterator_traits<T*>::pointer pointer;
+    typedef typename ft::iterator_traits<T*>::reference reference;
+    typedef typename ft::iterator_traits<T*>::iterator_category iterator_category;
 
     vector_iterator() : _p(NULL) {}
     vector_iterator( vector_iterator<value_type> const &it ) : _p(&(*it)) {}
@@ -35,8 +35,8 @@ class vector_iterator {
 
         //dereference
     
-    reference operator*() { return *_p; }
-    pointer operator->() { return _p; }
+    reference operator*() const { return *_p; }
+    pointer operator->() const { return _p; }
     reference operator[]( const std::size_t n ) {return *(_p + n); }
 
         //increment
