@@ -38,6 +38,16 @@ void    compare_vector(std::vector<T> const &stdvec, ft::vector<T> const &ftvec)
         std::cout << "OK !" << std::endl;
 }
 
+template<typename T>
+void    compare_functions(T const &stdf, T const &ftf) {
+    if (stdf == ftf)
+        std::cout << "OK !" << std::endl;
+    else
+        std::cout << "error : return of STD: " << stdf << ", FT: " << ftf << std::endl;
+}
+
+
+
 int main(int ac, char **av) {
     // vector tests 
     {
@@ -70,6 +80,21 @@ int main(int ac, char **av) {
             stdvec3 = stdvec4;
             ftvec3 = ftvec4;
             compare_vector<int>(stdvec3, ftvec3);
+        }
+        {
+            std::cout << "MEMBER FUNCTIONS" << std::endl << std::endl;
+            std::vector<int> stdvec(2, 1);
+            ft::vector<int> ftvec(2, 1);
+
+            std::cout << "push_back: ";
+            stdvec.push_back(2);
+            ftvec.push_back(2);
+            compare_vector<int>(stdvec, ftvec);
+
+            std::cout << "void insert :"
+            stdvec.insert
+
+
         }
     }
 }
