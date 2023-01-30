@@ -22,16 +22,22 @@ public:
 
     //operators
     vector_iterator<value_type> &operator=(vector_iterator<value_type> const &it) { 
-        _p(&(*it));
+        _p = &(*it);
         return (*this);
     }
         //comparaison
     bool operator==(vector_iterator<value_type> const &it) const { return (_p == &(*it) ? true : false); }
+    bool operator==(vector_iterator<const value_type> const &it) const { return (_p == &(*it) ? true : false); }
     bool operator!=(vector_iterator<value_type> const &it) const { return (_p != &(*it) ? true : false); }
+    bool operator!=(vector_iterator<const value_type> const &it) const { return (_p != &(*it) ? true : false); }
     bool operator>=(vector_iterator<value_type> const &it) const { return (_p >= &(*it) ? true : false); }
+    bool operator>=(vector_iterator<const value_type> const &it) const { return (_p >= &(*it) ? true : false); }
     bool operator<=(vector_iterator<value_type> const &it) const { return (_p <= &(*it) ? true : false); }
+    bool operator<=(vector_iterator<const value_type> const &it) const { return (_p <= &(*it) ? true : false); }
     bool operator>(vector_iterator<value_type> const &it) const { return (_p > &(*it) ? true : false); }
+    bool operator>(vector_iterator<const value_type> const &it) const { return (_p > &(*it) ? true : false); }
     bool operator<(vector_iterator<value_type> const &it) const { return (_p < &(*it) ? true : false); }
+    bool operator<(vector_iterator<const value_type> const &it) const { return (_p < &(*it) ? true : false); }
 
         //dereference
     
@@ -82,8 +88,7 @@ public:
         return tmp -= n;
     }
 
-    difference_type operator-(vector_iterator<value_type> it) const { return _p - it._p; }
-    
+    difference_type operator-(vector_iterator<value_type> it) const { return _p - &(*it); }
         //arithmetic
     private:
     pointer _p;

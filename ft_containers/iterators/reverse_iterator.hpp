@@ -14,7 +14,7 @@ class reverse_iterator {
     typedef typename ft::iterator_traits<Iter>::iterator_category iterator_category;
 
     reverse_iterator() : _it() {}
-    reverse_iterator( reverse_iterator<Iter> const &it ) : _it(it) {}
+    reverse_iterator( Iter const &it ) : _it(it) {}
     template <typename U>
     reverse_iterator(const reverse_iterator<U> &other) : _it(other.base()) {};
 
@@ -99,11 +99,11 @@ class reverse_iterator {
     }
 
     reverse_iterator operator-( difference_type n ) const {
-        reverse_operator tmp = *this;
+        reverse_iterator tmp = *this;
         return tmp += n;
     }
 
-    difference_type operator-(reverse_iterator it) const { return it.base() - _it; }
+    difference_type operator-(reverse_iterator it) const { return &(*it) - &(*_it); }
     
         //arithmetic
     private:

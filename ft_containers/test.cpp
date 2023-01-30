@@ -21,17 +21,20 @@ void print_vector(std::vector<T> vec) {
 
 int main() {
     //std::allocator<int> alloc;
-    ft::vector<int>::size_type n = 9;
-    ft::vector<int> myvec(9, 2);
-    std::vector<int> stdvec(9, 2);
-    print_vector(myvec);
-    print_vector(stdvec);
-    ft::vector<int>::iterator it1 = myvec.end();
-    std::vector<int>::iterator it2 = stdvec.end();
-    myvec.push_back(3);
-    stdvec.push_back(3);
-    print_vector(myvec);
-    print_vector(stdvec);
-    std::cout << *(it1) << " " << *(it2) << std::endl;
+    ft::vector<int> fv1(5, 1), fv2(1, 1), fv3(2, 1), fv4(2, 2);
+    std::vector<int> sv1, sv2(1, 1), sv3(1, 1), sv4(2, 2);
+    ft::vector<int>::iterator it = fv1.begin();
+    fv1.insert(fv1.begin() + 1, 4);
+    fv2.insert(fv2.begin(), 2 , 2);
+    fv3.insert(fv3.begin(), fv4.begin(), fv4.end());
+    //print_vector(fv1);
+    //print_vector(fv2);
+    print_vector(fv3);
+    sv1.insert(sv1.begin(), 4);
+    sv2.insert(sv2.begin(), 2, 2);
+    sv3.insert(sv3.begin(), sv4.begin(), sv4.end());
+    //print_vector(sv2);
+    print_vector(sv3);
+
     return 0;
 }
