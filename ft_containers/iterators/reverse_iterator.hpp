@@ -49,16 +49,16 @@ class reverse_iterator {
 
         //dereference
     
-    reference operator*() {
+    reference operator*() const {
         Iter tmp = _it;
         return (*--tmp);
     }
-    pointer operator->() {
+    pointer operator->() const {
         Iter tmp = _it;
         return &(*--tmp);
     }
 
-    reference operator[]( const std::size_t n ) {return *(*this + n); }
+    reference operator[]( const std::size_t n ) const {return *(*this + n); }
 
         //increment
     reverse_iterator& operator++() {
@@ -95,15 +95,15 @@ class reverse_iterator {
 
     reverse_iterator operator+( difference_type n ) const {
         reverse_iterator tmp = *this;
-        return tmp -= n;
+        return tmp += n;
     }
 
     reverse_iterator operator-( difference_type n ) const {
         reverse_iterator tmp = *this;
-        return tmp += n;
+        return tmp -= n;
     }
 
-    difference_type operator-(reverse_iterator it) const { return &(*it) - &(*_it); }
+    difference_type operator-(const reverse_iterator &it) const { return &(*it) - &(*_it) + 1; }
     
         //arithmetic
     private:

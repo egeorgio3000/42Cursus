@@ -103,13 +103,20 @@ void stack_tests() {
 }
 void vector_tests()
 {
-#ifdef STD
-    std::cout << "/ / /   STD::VECTOR TESTS   \\ \\ \\" << std::endl
-              << std::endl;
+#ifndef STD
+        std::cout << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << "    //                              FT::VECTOR TESTS                               //" << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << std::endl;
 #else
-    std::cout << "/ / /   FT::VECTOR TESTS   \\ \\ \\" << std::endl
-              << std::endl;
+        std::cout << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << "    //                              STD::VECTOR TESTS                              //" << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << std::endl;
 #endif
+
     struct timeval start;
     gettimeofday(&start, NULL);
 
@@ -145,6 +152,10 @@ void vector_tests()
     for (unsigned int i(0); i != vectorB.size(); ++i)
         std::cout << "    vectorB.at(" << i << "): " << vectorB.at(i) << std::endl;
     std::cout << std::endl;
+    for (unsigned int i(0); i != vectorA.size(); ++i)
+        std::cout << "    vectorA.at(" << i << "): " << vectorA.at(i) << std::endl;
+    std::cout << std::endl;
+
 
     std::cout << std::endl
               << "    // <vector> member functions insert():" << std::endl
@@ -194,7 +205,7 @@ void vector_tests()
     std::cout << std::endl;
     std::cout << "    Print vectorA from rbegin() to rend():" << std::endl;
     for (ft::vector<int>::const_reverse_iterator it(vectorA.rbegin()); it != vectorA.rend(); ++it)
-        std::cout << "    vectorA[" << (it - vectorA.rbegin()) << "]: " << *it << std::endl;
+        std::cout << "    vectorA[" << (it - vectorA.rbegin() + 1) << "]: " << *it << std::endl;
 
     std::cout << std::endl;
     std::cout << "    Test const_iterator and iterator compatibility:" << std::endl;
@@ -225,7 +236,7 @@ void vector_tests()
     std::cout << std::endl;
 
     for (unsigned int i(0); i != vectorB.size(); ++i)
-        std::cout << "    vectorB." << i << "]: " << vectorB[i] << std::endl;
+        std::cout << "    vectorB[" << i << "]: " << vectorB[i] << std::endl;
 
     std::cout << std::endl;
 
@@ -272,6 +283,6 @@ void vector_tests()
 }
 
 int main() {
-    stack_tests();
+   // stack_tests();
     vector_tests();
 }

@@ -182,6 +182,38 @@ int main(int ac, char **av) {
             compare_vector<int>(stdvec, ftvec);
             std::cout << "vec2: ";
             compare_vector<int>(stdvec2, ftvec2);
-        }
+
+            ftvec.clear();
+            stdvec.clear();
+            ftvec.push_back(1);
+            ftvec.push_back(2);
+            ftvec.push_back(3);
+            ftvec.push_back(4);
+            ftvec.push_back(5);            
+            stdvec.push_back(1);
+            stdvec.push_back(2);
+            stdvec.push_back(3);
+            stdvec.push_back(4);
+            stdvec.push_back(5);
+            std::cout << "arithmetic iterators" << std::endl;
+            ft::vector<int>::const_reverse_iterator fit1 = ftvec.rbegin(), fit2 = ftvec.rend();
+            std::vector<int>::const_reverse_iterator sit1 = stdvec.rbegin(), sit2 = stdvec.rend();
+            std::cout << fit1 - fit2 << std::endl;
+            std::cout << sit1 - sit2 << std::endl;
+            std::cout << "ft: " << *(fit1++) << " " << *(++fit1) << " " << *(fit1--) << " " << *(--fit1) << " " << *(fit2 - 1) << " " << *(fit1 + 1) << " " << fit1 - fit2 << std::endl;
+            std::cout << "std: " << *(sit1++) << " " << *(++sit1) << " " << *(sit1--) << " " << *(--sit1) << " " << *(sit2 - 1) << " " << *(sit1 + 1) << " " << sit1 - sit2 << std::endl;
+            
+            
+            std::cout << std::endl;
+            std::cout << " iterator comparison: " << std::endl;
+            std::cout << (sit1 == sit2) << std::endl;
+            std::cout << (fit1 == fit2) << std::endl;            
+            std::cout << (sit1 != sit2) << std::endl;
+            std::cout << (fit1 != fit2) << std::endl;
+            std::cout << (sit1 <= sit2) << std::endl;
+            std::cout << (fit1 <= fit2) << std::endl;
+            std::cout << (sit1 > sit2) << std::endl;
+            std::cout << (fit1 > fit2) << std::endl;
+            }
     }
 }

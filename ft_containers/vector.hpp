@@ -1,5 +1,5 @@
 #ifndef VECTOR_HPP
-# define VECTOR _HPP
+# define VECTOR_HPP
 
 #include <iostream>
 #include <stdexcept>
@@ -50,13 +50,8 @@ public:
     }
     
     vector(ft::vector<T, allocator_type> const& src) : _alloc(src.get_allocator()), _size(0), _capacity(0), _p(NULL)  {
-        /* _alloc = src.get_allocator();
-        _p = _alloc.allocate(src.size());
-        _size = src.size();
-        _capacity = src.capacity();
-        for (size_type i = 0; i < src.size(); i++)
-            _alloc.construct(_p + i, src[i]); */
-        *this = src;
+        if (this != &src)
+            *this = src;
     }
     ~vector() { _alloc.deallocate(_p, _capacity); }
 
@@ -130,10 +125,17 @@ public:
             reserve(_size * 2);
             position = iterator(_p + pos);
         }
-        for (size_type i = 0; i < n; i++) {
+        pointer ptrPos = _p + pos;
+        pointer ptrEnd = _p + _size + n;
+        for (; ptrEnd != ptrPos + n) {
+            _alloc.construct(ptrEnd, *(ptrEnd - n));
+            _alloc.destroy(ptrEnd - n);
+        }
+        for (; ptrEnd)
+        /*for (size_type i = 0; i < n; i++) {
             position = insert(position, x);
             //position++;
-        }
+        }*/
         return (iterator(_p + pos));
     }
 
@@ -152,7 +154,7 @@ public:
         for (size_type i = 0; i < n; i++) {
             position = insert(position, *(first));
             first++;
-            //position++;
+            position++;
         }
         return (iterator(_p + pos));
     }
@@ -293,19 +295,19 @@ private:
 // non member functions
 
 template< class T, class Alloc >
-bool operator==( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator==( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
-bool operator!=( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return !equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
-bool operator<=( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator<=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
-bool operator>=( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator>=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
-bool operator<( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+bool operator<( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 template< class T, class Alloc >
-bool operator>( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+bool operator>( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 
 template< class T, class Alloc >
-void swap( std::vector<T,Alloc>& lhs, std::vector<T,Alloc>& rhs ) { lhs.swap(rhs); }
+void swap( ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs ) { lhs.swap(rhs); }
 }
 #endif

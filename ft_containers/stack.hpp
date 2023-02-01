@@ -44,22 +44,22 @@ protected:
 };
 
 template <class T, class Container>
-bool operator==(const stack<T, Container> &x,
-                const stack<T, Container> &y) { return x.c == y.c; }
+bool operator==(const ft::stack<T, Container> &x,
+                const ft::stack<T, Container> &y) { return x.c == y.c; }
 template <class T, class Container>
-bool operator<(const stack<T, Container> &x,
-               const stack<T, Container> &y) { return x.c < y.c; }
+bool operator<(const ft::stack<T, Container> &x,
+               const ft::stack<T, Container> &y) { return x.c < y.c; }
 template <class T, class Container>
-bool operator!=(const stack<T, Container> &x,
-                const stack<T, Container> &y) { return x.c != y.c; }
+bool operator!=(const ft::stack<T, Container> &x,
+                const ft::stack<T, Container> &y) { return x.c != y.c; }
 template <class T, class Container>
-bool operator>(const stack<T, Container> &x,
-               const stack<T, Container> &y) { return x.c > y.c; }
+bool operator>(const ft::stack<T, Container> &x,
+               const ft::stack<T, Container> &y) { return x.c > y.c; }
 template <class T, class Container>
-bool operator>=(const stack<T, Container> &x,
-                const stack<T, Container> &y) { return x.c >= y.c; }
+bool operator>=(const ft::stack<T, Container> &x,
+                const ft::stack<T, Container> &y) { return x.c >= y.c; }
 template <class T, class Container>
-bool operator<=(const stack<T, Container> &x,
-                const stack<T, Container> &y) { return x.c <= y.c; }
+bool operator<=(const ft::stack<T, Container> &x,
+                const ft::stack<T, Container> &y) { return x.c <= y.c; }
 }
 #endif
