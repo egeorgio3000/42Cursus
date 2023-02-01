@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include "stack.hpp"
 #include "vector.hpp"
 template <typename T>
 void print_vector(ft::vector<T> vec) {
@@ -36,5 +37,16 @@ int main() {
     //print_vector(sv2);
     print_vector(sv3);
 
+    std::cout << std::endl << std::endl;
+    ft::stack<int> s1;
+    std::cout << s1.size() << std::endl;
+    s1.push(4);
+    std::cout << s1.size() << " " << s1.top() << std::endl;
+    s1.push(3);
+    std::cout << s1.size() << " " << s1.top() << std::endl;
+    s1.push(2);
+    std::cout << s1.size() << " " << s1.top() << std::endl;
+    s1.pop();
+    std::cout << s1.size() << " " << s1.top() << std::endl;
     return 0;
 }

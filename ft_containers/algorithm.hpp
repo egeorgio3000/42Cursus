@@ -1,3 +1,6 @@
+#ifndef ALGORITHM_HPP
+# define ALGORITHM_HPP
+
 #include <sstream>
 #include <string>
 
@@ -59,3 +62,5 @@ void swap( T& a, T& b ) {
     b = tmp;
 }
 }
+
+#endif

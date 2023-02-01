@@ -1,6 +1,7 @@
 #ifndef STD
 
 #include "vector.hpp"
+#include "stack.hpp"
 #else
 #include <map>
 #include <stack>
@@ -27,7 +28,79 @@ void print_test_time(const std::string test_name, const struct timeval &start)
     std::cout
         << tabbed << " tests time: " << (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_usec - start.tv_usec) << "us" << std::endl;
 }
+void stack_tests() {
 
+    /////////////////////////////////////////////////////////////////////////////////
+    //                    START OF STACK TESTS                                     //
+    /////////////////////////////////////////////////////////////////////////////////
+#ifndef STD
+        std::cout << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << "    //                              FT::STACK TESTS                               //" << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << std::endl;
+#else
+        std::cout << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << "    //                              STD::STACK TESTS                              //" << std::endl
+                  << "    /////////////////////////////////////////////////////////////////////////////////" << std::endl
+                  << std::endl;
+#endif
+
+
+    struct timeval start;
+    gettimeofday(&start, NULL);
+    ft::stack<int> stackA;
+
+    std::cout << "    // <stack> member function push():" << std::endl
+                  << std::endl;
+    for (int i(0); i != 10; ++i) {
+            std::cout << "    stackA.push(" << i << ");" << std::endl;
+
+        stackA.push(i);
+    }
+
+        std::cout << std::endl
+                  <<  "    // <stack> operator=:" << std::endl
+                  << std::endl
+                  << "    ft::stack<int>stackB = stackA" << std::endl;
+
+    ft::stack<int> stackB = stackA;
+
+    std::cout << std::endl
+                  << "    // <stack> member functions top() / pop() / size():"  << std::endl
+                  << std::endl;
+
+    while (stackA.size()) {
+        std::cout << "    stackA.size() = " << stackA.size() << std::endl;
+        std::cout << "    stackA.top() = " << stackA.top() << std::endl;
+        std::cout << "    stackA.pop()" << std::endl;
+        stackA.pop();
+    }
+
+    std::cout << std::endl
+                  << "    // <stack> relational operators and member function empty():" << std::endl
+                  << std::endl;
+        std::cout << "    stackA == stackB: " << (stackA == stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA != stackB: " << (stackA != stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA < stackB: " << (stackA < stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA > stackB: " << (stackA > stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA <= stackB: " << (stackA <= stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA >= stackB: " << (stackA >= stackB ? "true" : "false") << std::endl;
+        std::cout << "    stackA.empty(): " << (stackA.empty() ? "true" : "false") << std::endl;
+        std::cout << std::endl;
+
+
+#ifndef STD
+    print_test_time("ft::stack", start);
+#else
+    print_test_time("std::stack", start);
+#endif
+
+    /////////////////////////////////////////////////////////////////////////////////
+    //                    END OF STACK TESTS                                       //
+    /////////////////////////////////////////////////////////////////////////////////
+}
 void vector_tests()
 {
 #ifdef STD
@@ -199,5 +272,6 @@ void vector_tests()
 }
 
 int main() {
+    stack_tests();
     vector_tests();
 }
