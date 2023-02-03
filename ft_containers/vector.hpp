@@ -126,16 +126,15 @@ public:
             position = iterator(_p + pos);
         }
         pointer ptrPos = _p + pos;
-        pointer ptrEnd = _p + _size + n;
-        for (; ptrEnd != ptrPos + n) {
+        pointer ptrEnd = _p + (_size + n -1);
+        for (; ptrEnd != ptrPos + n - 1; --ptrEnd) {
             _alloc.construct(ptrEnd, *(ptrEnd - n));
             _alloc.destroy(ptrEnd - n);
         }
-        for (; ptrEnd)
-        /*for (size_type i = 0; i < n; i++) {
-            position = insert(position, x);
-            //position++;
-        }*/
+        for (size_type i = 0; i < n; i++) {
+            _alloc.construct(ptrPos + i, x);
+        }
+        _size += n;
         return (iterator(_p + pos));
     }
 
@@ -151,11 +150,17 @@ public:
             reserve(_size * 2);
             position = iterator(_p + pos);
         }
-        for (size_type i = 0; i < n; i++) {
-            position = insert(position, *(first));
-            first++;
-            position++;
+        pointer ptrPos = _p + pos;
+        pointer ptrEnd = _p + (_size + n -1);
+        for (; ptrEnd != ptrPos + n - 1; --ptrEnd) {
+            _alloc.construct(ptrEnd, *(ptrEnd - n));
+            _alloc.destroy(ptrEnd - n);
         }
+        for (size_type i = 0; i < n; i++) {
+            _alloc.construct(ptrPos + i, *first);
+            first++;
+        }
+        _size += n;
         return (iterator(_p + pos));
     }
 
@@ -290,6 +295,7 @@ private:
     size_type       _size;
     size_type       _capacity;
     pointer        _p;
+
 
 };
 // non member functions

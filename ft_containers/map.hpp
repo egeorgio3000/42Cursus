@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <memory>
 #include <string>
-#include "./iterators/vector_iterator.hpp"
+#include "./iterators/map_iterator.hpp"
 #include "./iterators/reverse_iterator.hpp"
 #include "pair.hpp"
 #include "enable_if.hpp"
@@ -13,7 +13,7 @@
 
 namespace ft {
 
-template< typename Key, typename T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T>> >
+template< typename Key, typename T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T>> >
 class map {
 public:
     //types:
@@ -44,7 +44,14 @@ public:
     };
 
     //constructors
-    explicit map(const key_compare &comp = Compare(), const allocator_type& = Allocator()) {}
+    explicit map(const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _comp(comp), _alloc(alloc), _nodeAlloc(), _size(0) {
+        _root = _nodeAlloc.allocate(1);
+        _alloc.construct(_root, Node());
+        _leaf = _nodeAlloc.allocate(1);
+        _leaf.construct(_leaf, Node());
+        _root->right = _leaf;
+        _leaf->parent = _root;
+    }
     
     template <class InputIterator>
     map(InputIterator first, InputIterator last, const key_compare& comp = Compare(), const allocator_type& = Allocator()) {}
@@ -53,6 +60,26 @@ public:
         if (this != &src)
             *this = src;
     }
+
+    //modifiers
+
+    protected:
+        typedef typename ft::AVLtree<value_type> Node;
+        typedef typename allocator_type::rebind<Node>::other node_allocator_type;
+
+        Node *add_node_left() {
+            
+        }
+
+    private:
+       
+        Node *_root;
+        Node *_leaf;
+        size_type _size;
+        allocator_type _alloc;
+        node_allocator_type _nodeAlloc;
+        key_compare _comp;
+
 
 };
 }
