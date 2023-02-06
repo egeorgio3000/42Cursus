@@ -10,7 +10,7 @@ struct AVLtree {
     AVLtree *right;
     AVLtree *left;
     AVLtree *parent;
-    size_t  depth;
+    size_t  height;
     AVLtree() : data(), right(NULL), left(NULL), parent(NULL), depth(0) {}
 };
 

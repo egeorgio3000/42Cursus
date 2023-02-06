@@ -62,14 +62,19 @@ public:
     }
 
     //modifiers
+    ft::pair<iterator, bool> insert(value_type const &value) {
+        iterator it;
+        Node *actual = 
+        return ft::make_pair(it, true);
+    }
 
     protected:
         typedef typename ft::AVLtree<value_type> Node;
         typedef typename allocator_type::rebind<Node>::other node_allocator_type;
 
-        Node *add_node_left() {
-            
-        }
+        Node *rotateLeft() {}
+        Node *rotateRight() {}
+        void balanceTree() {}
 
     private:
        
