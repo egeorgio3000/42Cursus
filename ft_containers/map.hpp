@@ -74,6 +74,7 @@ public:
 
         Node *rotateLeft() {}
         Node *rotateRight() {}
+        void *ajustHeight() {}
         void balanceTree() {}
 
     private:

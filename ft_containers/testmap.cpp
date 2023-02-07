@@ -10,9 +10,9 @@ struct AVLtree {
     T   data;
     AVLtree *right;
     AVLtree *left;
-    //AVLtree *parent;
+    AVLtree *parent;
     size_t  height;
-    AVLtree(T value = T()) : data(value), right(NULL), left(NULL), height(0) {}
+    AVLtree(T value = T(), AVLtree *_parent = NULL) : data(value), right(NULL), left(NULL), parent(_parent), height(0) {}
     bool leaf() { return !right && !left ? true : false; }
 };
 
@@ -73,35 +73,94 @@ class myMap {
             }
             if (actual->data > value) {
                 actual->left = _nodeAlloc.allocate(1);
-                _nodeAlloc.construct(actual->left, Node(value));
+                _nodeAlloc.construct(actual->left, Node(value, actual));
                 actual = actual->left;
             }
             else {
                 actual->right = _nodeAlloc.allocate(1);
-                _nodeAlloc.construct(actual->right, Node(value));
+                _nodeAlloc.construct(actual->right, Node(value, actual));
                 actual = actual->right;
             }
             _size++;
             return actual;
         }
-    
+
+        bool ratioNode(Node *node) {
+            return (node->left != NULL ? node->left : -1) - (node->right != NULL ? node->right: -1);
+        }
+
+        Node *rotateRight(Node *oldRoot) {
+            Node *newRoot = oldRoot->left;
+            if (newRoot->right)
+                oldRoot->left = newRoot->right;
+            else
+                oldRoot->left = NULL;
+            newRoot->right = oldRoot;
+            return newRoot;
+
+        }
+
+        Node *rotateLeft(Node *oldRoot) {
+            Node *newRoot = oldRoot->right;
+            if (newRoot->left) {
+                oldRoot->right = newRoot->left;
+                newRoot->left->parent = oldRoot;
+            }
+            else
+                oldRoot->right = NULL;
+            newRoot->left = oldRoot;
+            oldRoot->parent = newRoot;
+            return newRoot;
+
+        }
+
+        Node *balanceTree(Node *inserted) {
+            bool right = true;
+            if (inserted->parent)
+                right = inserted->parent->right == inserted ? true : false;
+            inserted = inserted->parent;
+            while (inserted != NULL) {
+                if (ratioNode(inserted) > 1) {
+                    if (right) {
+                        //inserted = rotateLeftRight(inserted);
+                    }
+                    else {
+                        inserted = rotateRight(inserted);
+                    }
+                }
+                else if (ratioNode(inserted) < -1) {
+                    if (right) {
+                        inserted = rotateLeft(inserted);
+                    }
+                    else {
+                        //inserted = rotateRightLeft(inserted);
+                    }
+                }
+                inserted = inserted->parent;
+            }
+            return (inserted); // return le nouveau _root
+        }
 };
 
 int main() {
     myMap<int> tree;
     tree.insert(5);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
+    std::cout << std::endl;
     tree.insert(3);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    tree.insert(4);
+    std::cout << std::endl;
+    tree.insert(2);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    std::cout << "->left->right: height: " << tree._root->left->right->height << "_size : " << tree._size << " value : " << tree._root->left->right->data << std::endl;
-    tree.insert(8);
+    std::cout << "->left->left: height: " << tree._root->left->left->height << "_size : " << tree._size << " value : " << tree._root->left->left->data << std::endl;
+    std::cout << std::endl;
+    tree._root = tree.rotateRight(tree._root);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    std::cout << "->left->right: height: " << tree._root->left->right->height << "_size : " << tree._size << " value : " << tree._root->left->right->data << std::endl;
     std::cout << "->right: height: " << tree._root->right->height << "_size : " << tree._size << " value : " << tree._root->right->data << std::endl;
+
+
 
 }
