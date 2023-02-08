@@ -55,16 +55,12 @@ class myMap {
             while (actual) {
                 
                 if (actual->data > value) {
-                    if (!actual->right)
-                        actual->height++;
                     if (actual->left)
                         actual = actual->left;
                     else
                         break;
                 }
                 else {
-                    if (!actual->left)
-                        actual->height++;
                     if (actual->right)
                         actual = actual->right;
                     else
@@ -82,20 +78,39 @@ class myMap {
                 actual = actual->right;
             }
             _size++;
+            adjustHeight(actual);
             return actual;
         }
 
-        bool ratioNode(Node *node) {
-            return (node->left != NULL ? node->left : -1) - (node->right != NULL ? node->right: -1);
+        int ratioNode(Node *node) {
+            return (node->height - (node->left != NULL ? node->left->height : -1)) - (node->height - (node->right != NULL ? node->right->height : -1));
+        }
+
+        void adjustHeight(Node *inserted) {
+                inserted->height = 0;
+                if (inserted->right)
+                    inserted->height = inserted->right->height + 1;
+                if (inserted->left) {
+                    if (inserted->left->height > inserted->height)
+                        inserted->height = inserted->left->height + 1;
+                }
+                inserted = inserted->parent;
         }
 
         Node *rotateRight(Node *oldRoot) {
             Node *newRoot = oldRoot->left;
-            if (newRoot->right)
+            if (newRoot->right) {
                 oldRoot->left = newRoot->right;
+                newRoot->right->parent = oldRoot;
+            }
             else
                 oldRoot->left = NULL;
-            newRoot->right = oldRoot;
+            newRoot->right = oldRoot;     
+            newRoot->parent = oldRoot->parent;   
+            if (newRoot->parent) {
+                newRoot->parent->right = oldRoot->parent;
+            }   
+            oldRoot->parent = newRoot;
             return newRoot;
 
         }
@@ -106,38 +121,53 @@ class myMap {
                 oldRoot->right = newRoot->left;
                 newRoot->left->parent = oldRoot;
             }
-            else
+            else {
                 oldRoot->right = NULL;
+
+            }
             newRoot->left = oldRoot;
+            newRoot->parent = oldRoot->parent;
+            if (newRoot->parent) {
+                newRoot->parent->left = oldRoot->parent;
+            }
             oldRoot->parent = newRoot;
             return newRoot;
 
         }
 
         Node *balanceTree(Node *inserted) {
-            bool right = true;
-            if (inserted->parent)
-                right = inserted->parent->right == inserted ? true : false;
-            inserted = inserted->parent;
-            while (inserted != NULL) {
-                if (ratioNode(inserted) > 1) {
-                    if (right) {
-                        //inserted = rotateLeftRight(inserted);
+            bool flag = false;
+            Node *tmpInserted = inserted;
+            do {
+                //std::cout << ratioNode(inserted) << " = " << inserted->height << " - " << inserted->left->height << " - (" << inserted->height << " - (-1) )" << std::endl;
+                inserted = inserted->parent;
+                if (inserted == _root)
+                    flag = true;
+                if (ratioNode(inserted) < -1) {
+                    if (inserted->left->right && inserted->left->right->height > 0) {
+                        inserted->left = rotateLeft(inserted->left);
+                        inserted = rotateRight(inserted)
                     }
                     else {
                         inserted = rotateRight(inserted);
                     }
+                    if (flag) {
+                        break;
+                    }
                 }
-                else if (ratioNode(inserted) < -1) {
-                    if (right) {
+                else if (ratioNode(inserted) > 1) {
+                    if (inserted->left->right && inserted->left->right->height > 0) {
+                        inserted->right = rotateRight(inserted->right);
                         inserted = rotateLeft(inserted);
                     }
                     else {
-                        //inserted = rotateRightLeft(inserted);
+                        inserted = rotateLeft(inserted);
                     }
+                    if (flag)
+                        break;
                 }
-                inserted = inserted->parent;
-            }
+            } while (inserted != _root);
+            
             return (inserted); // return le nouveau _root
         }
 };
@@ -147,16 +177,16 @@ int main() {
     tree.insert(5);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << std::endl;
-    tree.insert(3);
+    tree.insert(6);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
-    std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
+    //std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
     std::cout << std::endl;
-    tree.insert(2);
+    myMap<int>::Node *inserted = tree.insert(7);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
-    std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    std::cout << "->left->left: height: " << tree._root->left->left->height << "_size : " << tree._size << " value : " << tree._root->left->left->data << std::endl;
+    //std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
+    //std::cout << "->left->left: height: " << tree._root->left->left->height << "_size : " << tree._size << " value : " << tree._root->left->left->data << std::endl;
     std::cout << std::endl;
-    tree._root = tree.rotateRight(tree._root);
+    tree._root = tree.balanceTree(inserted);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
     std::cout << "->right: height: " << tree._root->right->height << "_size : " << tree._size << " value : " << tree._root->right->data << std::endl;
