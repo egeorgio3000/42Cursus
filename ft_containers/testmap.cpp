@@ -33,14 +33,7 @@ class myMap {
         allocator_type _alloc;
         node_allocator_type _nodeAlloc;
 
-        explicit myMap() : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL) {
-        /*_root = _nodeAlloc.allocate(1);
-        _alloc.construct(_root, Node());
-        _leaf = _nodeAlloc.allocate(1);
-        _leaf.construct(_leaf, Node());
-        _root->right = _leaf;
-        _leaf->parent = _root; */
-        }
+        explicit myMap() : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL) {}
         ~myMap() { _nodeAlloc.deallocate(_root, 1); }
 
         //insert
@@ -77,8 +70,13 @@ class myMap {
                 _nodeAlloc.construct(actual->right, Node(value, actual));
                 actual = actual->right;
             }
+            Node *tmp = actual;
+            while (tmp != NULL) {
+                adjustHeight(tmp);
+                tmp = tmp->parent;
+            }
             _size++;
-            adjustHeight(actual);
+
             return actual;
         }
 
@@ -91,7 +89,7 @@ class myMap {
                 if (inserted->right)
                     inserted->height = inserted->right->height + 1;
                 if (inserted->left) {
-                    if (inserted->left->height > inserted->height)
+                    if (inserted->left->height >= inserted->height)
                         inserted->height = inserted->left->height + 1;
                 }
                 inserted = inserted->parent;
@@ -111,6 +109,8 @@ class myMap {
                 newRoot->parent->right = oldRoot->parent;
             }   
             oldRoot->parent = newRoot;
+            adjustHeight(oldRoot);
+            adjustHeight(newRoot);
             return newRoot;
 
         }
@@ -131,6 +131,8 @@ class myMap {
                 newRoot->parent->left = oldRoot->parent;
             }
             oldRoot->parent = newRoot;
+            adjustHeight(oldRoot);
+            adjustHeight(newRoot);
             return newRoot;
 
         }
@@ -146,7 +148,7 @@ class myMap {
                 if (ratioNode(inserted) < -1) {
                     if (inserted->left->right && inserted->left->right->height > 0) {
                         inserted->left = rotateLeft(inserted->left);
-                        inserted = rotateRight(inserted)
+                        inserted = rotateRight(inserted);
                     }
                     else {
                         inserted = rotateRight(inserted);
@@ -178,18 +180,17 @@ int main() {
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
     std::cout << std::endl;
     tree.insert(6);
-    std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
-    //std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    std::cout << std::endl;
-    myMap<int>::Node *inserted = tree.insert(7);
-    std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
-    //std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    //std::cout << "->left->left: height: " << tree._root->left->left->height << "_size : " << tree._size << " value : " << tree._root->left->left->data << std::endl;
-    std::cout << std::endl;
+    myMap<int>::Node *inserted = tree.insert(2);
+    inserted = tree.insert(1);
+    inserted = tree.insert(4);
+    inserted = tree.insert(3);
     tree._root = tree.balanceTree(inserted);
     std::cout << "root : height: " << tree._root->height << "_size : " << tree._size << " value : " << tree._root->data << std::endl;
-    std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
-    std::cout << "->right: height: " << tree._root->right->height << "_size : " << tree._size << " value : " << tree._root->right->data << std::endl;
+//    std::cout << "->left: height: " << tree._root->left->height << "_size : " << tree._size << " value : " << tree._root->left->data << std::endl;
+//    std::cout << "->right: height: " << tree._root->right->height << "_size : " << tree._size << " value : " << tree._root->right->data << std::endl;
+//    std::cout << "->left->left: height: " << tree._root->left->left->height << "_size : " << tree._size << " value : " << tree._root->left->left->data << std::endl;
+//    std::cout << "->left->right: height: " << tree._root->left->right->height << "_size : " << tree._size << " value : " << tree._root->left->right->data << std::endl;
+    //std::cout << "->left->right->left: height: " << tree._root->left->right->left->height << "_size : " << tree._size << " value : " << tree._root->left->right->left->data << std::endl;
 
 
 
