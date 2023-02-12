@@ -3,6 +3,7 @@
 #include <vector>
 #include "stack.hpp"
 #include "vector.hpp"
+#include "map.hpp"
 template <typename T>
 void print_vector(ft::vector<T> vec) {
     std::cout << "MY VEC: " << std::endl;

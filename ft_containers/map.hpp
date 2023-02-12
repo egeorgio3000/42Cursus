@@ -14,7 +14,7 @@
 namespace ft
 {
 
-template <typename Key, typename T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T>>>
+template <typename Key, typename T, class Compare = std::less<Key>, class Allocator = std::allocator<ft::pair<const Key, T> > >
 class map
 {
 public:
@@ -49,15 +49,36 @@ public:
     };
 
     // constructors
-    explicit myMap() : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL) {}
+    explicit map() : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL) {
+        _leaf = _nodeAlloc.allocate(1);
+        _nodeAlloc.construct(_leaf, Node());
+    }
 
     template <class InputIterator>
-    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type & = Allocator()) {}
+    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL), _leaf(NULL) {
+        _leaf = _nodeAlloc.allocate(1);
+        _nodeAlloc.construct(_leaf, Node());
+        insert(first, last);
+    }
 
     map(const ft::map<key_type, mapped_type, key_compare, allocator_type> &src)
     {
         if (this != &src)
             *this = src;
+    }
+
+    map &operator=( map const &rhs ) {
+        if (this != &rhs) {
+            clear();
+            _alloc = rhs._alloc;
+            _nodeAlloc = rhs._nodeAlloc;
+            _comp = ths._comp;
+            _leaf = _nodeAlloc.allocate(1);
+            _nodeAlloc.construct(_leaf, Node());
+            _size = 0;
+            insert(rhs.begin(), rhs.end());
+        }
+        return *this;
     }
 
     // modifiers
@@ -70,16 +91,20 @@ public:
     }
 
 protected:
-    typedef typename ft::AVLtree<value_type, allocator_type> Node;
-    typedef typename allocator_type::rebind<Node>::other node_allocator_type;
+    typedef typename ft::AVLtree<value_type> Node;
+    typedef typename allocator_type::template rebind<Node>::other node_allocator_type;
 
     //AVLtree functions
     Node *insertNode(value_type const &value)
     {
         if (_size == 0)
         {
+            
             _root = _nodeAlloc.allocate(1);
-            _nodeAlloc.construct(_root, Node(value));
+            _nodeAlloc.construct(_root, Node());
+            _alloc.construct(&_root->data, value);
+            _root->right = _leaf;
+            _leaf->parent = _root;
             _size++;
             return _root;
         }
@@ -87,7 +112,7 @@ protected:
         while (actual)
         {
 
-            if (actual->data > value)
+            if (!_comp(actual->data.first, value.first))
             {
                 if (actual->left)
                     actual = actual->left;
@@ -96,23 +121,34 @@ protected:
             }
             else
             {
-                if (actual->right)
+                if (actual->right && actual->right != _leaf) {
                     actual = actual->right;
+                }
                 else
                     break;
             }
         }
-        if (actual->data > value)
+        if (!_comp(actual->data.first, value.first))
         {
             actual->left = _nodeAlloc.allocate(1);
-            _nodeAlloc.construct(actual->left, Node(value, actual));
+            _nodeAlloc.construct(actual->left, Node(actual));
+            _alloc.construct(&actual->left->data, value);
             actual = actual->left;
         }
         else
         {
+            bool flag = false;
+            if (actual->right == _leaf) {
+                flag = true;
+            }
             actual->right = _nodeAlloc.allocate(1);
-            _nodeAlloc.construct(actual->right, Node(value, actual));
+            _nodeAlloc.construct(actual->right, Node(actual));
+            _alloc.construct(&actual->right->data, value);
             actual = actual->right;
+            if (flag) { // reconnexion de la _leaf
+                actual->right = _leaf;
+                _leaf->parent = actual;
+            }
         }
         Node *tmp = actual;
         while (tmp != NULL)
@@ -125,9 +161,20 @@ protected:
         return actual;
     }
 
+
+    Node *deleteNode(Node *node) {
+        if (!node || node == _leaf) {
+            return _root;
+        }
+        _alloc.destroy(node->data);
+        if (node->right) {
+            
+        }
+    }
+
     int ratioNode(Node *node)
     {
-        return (node->height - (node->left != NULL ? node->left->height : -1)) - (node->height - (node->right != NULL ? node->right->height : -1));
+        return (node->height - (node->left != NULL ? node->left->height : -1)) - (node->height - ((node->right != NULL && node->right != _leaf) ? node->right->height : -1));
     }
 
     void adjustHeight(Node *inserted)

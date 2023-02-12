@@ -90,7 +90,8 @@ public:
 
     difference_type operator-(vector_iterator<value_type> it) const { return _p - &(*it); }
         //arithmetic
-    private:
+        
+private:
     pointer _p;
 
 };
