@@ -26,10 +26,10 @@ public:
     typedef std::ptrdiff_t difference_type;
     typedef Compare key_compare;
     typedef Allocator allocator_type;
-    typedef typename Allocator::reference reference;
-    typedef typename Allocator::const_reference const_reference;
-    typedef typename Allocator::pointer pointer;
-    typedef typename Allocator::const_pointer const_pointer;
+    typedef T& reference;
+    typedef const T& const_reference;
+    typedef T* pointer;
+    typedef const T* const_pointer;
     typedef map_iterator<value_type> iterator;
     typedef map_iterator<const value_type> const_iterator;
     typedef ft::reverse_iterator<iterator> reverse_iterator;
@@ -81,6 +81,8 @@ public:
         return *this;
     }
 
+    allocator_type get_allocator() const { return _alloc; }
+
     // modifiers
     ft::pair<iterator, bool> insert(value_type const &value)
     {
@@ -90,11 +92,130 @@ public:
         return ft::make_pair(it, true);
     }
 
+
+    // iterators
+
+    iterator begin() {
+        Node *node = _root;
+        if (!_size)
+            return (iterator(_leaf);)
+        while (node->left)
+            node = node->left;
+        return iterator(node);
+    }
+
+    const_iterator begin() const {
+        Node *node = _root;
+        if (!_size)
+            return (const_iterator(_leaf);)
+        while (node->left)
+            node = node->left;
+        return const iterator(node);
+    }
+
+    reverse_iterator rbegin(void) { return reverse_iterator(end()); }
+    const_reverse_iterator rbegin(void) const { return const_reverse_iterator(end()); }
+
+    iterator end(void) { return iterator(_leaf); }
+    const_iterator end(void) const { return const_iterator(_leaf); }
+
+    reverse_iterator rend(void) { return reverse_iterator(begin()); }
+    const_reverse_iterator rend(void) const { return const_reverse_iterator(begin()); }
+
+    //accesseurs
+
+    reference at( const key_type &key ) {
+        iterator it = find(key);
+        if ( it == end() )
+            throw std::out_of_range("ft::map::at");
+        return (it->second);
+    }
+
+    const_reference at( const key_type &key) const {
+        const_iterator it = find(key);
+        if ( it == end() )
+            throw std::out_of_range("ft::map::at");
+        return (it->second);
+    }
+
+    reference operator[](const key_type &key) { return insertNode(ft::make_pair<key_type, mapped_type>(key, T()))->data.second; }
+
+    //Capacity
+
+    size_type size() const { return _size; }
+    size_type max_size() const { return _nodeAlloc.max_size(); }
+    bool      empty() const {return _size; }
+
+    //Look_up 
+
+    size_type count( const Key& key ) const { return find(key) == end() ? 0 : 1; }
+    iterator find( const Key& key ) { return iterator(findNode(key)); }
+    const_iterator find( const Key& key ) const { return const_iterator(findNode(key)); }
+    ft::pair<iterator, iterator> equal_range(const Key& key) { return ft::make_pair(lower_bound(key), upper_bound(key)); }
+    ft::pair<const_iterator, const_iterator> equal_range(const Key& key) const { return ft::make_pair(lower_bound(key), upper_bound(key)); }
+
+    iterator lower_bound(const Key& key) {
+        iterator it = begin();
+        while (it != end() && _comp(it->first, key))
+            it++;
+        return it;
+    }
+
+    const_iterator lower_bound(const Key& key) const {
+        const_iterator it = begin();
+        while (it != end() && _comp(it->first, key))
+            it++;
+        return it;
+    }
+
+    iterator upper_bound(const Key& key) {
+        iterator it = begin();
+        while (it != end() && !_comp(key, it->first))
+            it++;
+        return it;
+    }
+
+    const_iterator upper_bound(const Key& key) const {
+        const_iterator it = begin();
+        while (it != end() && !_comp(key, it->first))
+            it++;
+        return it;
+    }
+
+
+    //observers 
+    key_compare key_comp() const { return _comp; }
+    ft::map::value_compare value_comp() const { return value_compare(_comp); }
+
+
 protected:
     typedef typename ft::AVLtree<value_type> Node;
     typedef typename allocator_type::template rebind<Node>::other node_allocator_type;
 
     //AVLtree functions
+
+    Node *findNode(key_type const &key) {
+        if (empty()) {
+            return (_leaf);
+        }
+        Node *toFind = _root;
+        while (toFind->data.first != key) {
+            if (_comp(toFind->data.first, key)) {
+                if (toFind->right && toFind->right != _leaf)
+                    toFind = toFind->right;
+                else
+                    return _leaf;
+            }
+            else {
+                if (toFind->left && toFind->left != _leaf)
+                    toFind = toFind->right;
+                else
+                    return _leaf;
+            }
+        }
+        return toFind;
+    }
+
     Node *insertNode(value_type const &value)
     {
         if (_size == 0)

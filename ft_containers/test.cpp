@@ -1,9 +1,12 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <map>
 #include "stack.hpp"
 #include "vector.hpp"
-#include "map.hpp"
+//#include "map.hpp"
+
+
 template <typename T>
 void print_vector(ft::vector<T> vec) {
     std::cout << "MY VEC: " << std::endl;
@@ -22,6 +25,13 @@ void print_vector(std::vector<T> vec) {
 }
 
 int main() {
+
+    std::map<int, int> myMap;
+    myMap.insert(std::pair<int, int>(1, 2));
+    try {
+        myMap.at(4);
+    }
+    catch (std::exception &e) { std::cout << e.what() << std::endl; }
     //std::allocator<int> alloc;
     ft::vector<int> fv1(5, 1), fv2(1, 1), fv3(2, 1), fv4(2, 2);
     std::vector<int> sv1, sv2(1, 1), sv3(1, 1), sv4(2, 2);
