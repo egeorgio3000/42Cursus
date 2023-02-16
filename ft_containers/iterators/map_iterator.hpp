@@ -27,7 +27,7 @@ public:
 
     typedef AVLtree<value_type> Node;
 
-    map_iterator() : _node(NULL) {}
+    map_iterator(Node *node = NULL) : _node(node) {}
     map_iterator( map_iterator<value_type> const &it ) : _node(it.getNode()) {}
     map_iterator( pointer p ) : _node(p) {}
     map_iterator( reference p ) : _node(&p) {}
@@ -54,12 +54,14 @@ public:
         } else {
             while (_node->parent && _node == _node->parent->right)
                 _node = _node->parent;
+            _node = _node->parent;
         }
+        return (*this);
     }
 
-    map_iterator &operator++(int) {
+    map_iterator operator++(int) {
         map_iterator tmp(*this);
-        (*this)++;
+        ++(*this);
         return tmp;
     }
 
@@ -71,19 +73,23 @@ public:
         } else {
             while (_node->parent && _node == _node->parent->left)
                 _node = _node->parent;
+            _node = _node->parent;
         }
+        return (*this);
     }
 
-    map_iterator &operator--(int) {
+    map_iterator operator--(int) {
         map_iterator tmp(*this);
-        (*this)--;
+        --(*this);
         return tmp;
     }
 
     Node *getNode() const { return _node; }
 
-    bool operator==(const map_iterator& it) const { return _node == it.getNode(); }
-    bool operator!=(const map_iterator& it) const { return _node != it.getNode(); }
+    bool operator==(const map_iterator<value_type>& it) const { return _node == it.getNode(); }
+    bool operator==(const map_iterator<const value_type>& it) const { return _node == it.getNode(); }
+    bool operator!=(const map_iterator<value_type>& it) const { return _node != it.getNode(); }
+    bool operator!=(const map_iterator<const value_type>& it) const { return _node != it.getNode(); }
 private:
     
     Node *_node;
