@@ -16,6 +16,10 @@ void print_map(ft::map<Key, T> const &map) {
         std::cout << "key= " << it->first << ", value= " << it->second << " ";
     }
     std::cout << std::endl << "Size: " << map.size() << std::endl;
+    #ifdef DEBUG
+    if (map._root)
+        std::cout << "root key: " << map._root->data.first << std::endl;
+    #endif
 }
 
 template <typename Key, typename T>
@@ -35,6 +39,22 @@ int main() {
     ftmap.insert(ft::pair<int, std::string>(5, "cinq"));
     print_map(ftmap);
     ftmap.insert(ft::pair<int, std::string>(1, "un"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(9, "neuf"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(3, "trois"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(4, "quatre"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(2, "deux"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(12, "douze"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(8, "huit"));
+    print_map(ftmap);
+    ftmap.insert(ft::pair<int, std::string>(7, "sept"));
+    print_map(ftmap);
+    ftmap.erase(12);
     print_map(ftmap);
     return 0;
 }

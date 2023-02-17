@@ -49,13 +49,13 @@ public:
     };
 
     // constructors
-    explicit map() : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL) {
+    explicit map() : _root(NULL), _size(0), _alloc(Allocator()), _nodeAlloc() {
         _leaf = _nodeAlloc.allocate(1);
         _nodeAlloc.construct(_leaf, Node());
     }
 
     template <class InputIterator>
-    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _alloc(Allocator()), _nodeAlloc(), _size(0), _root(NULL), _leaf(NULL) {
+    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _comp(comp), _alloc(alloc), _nodeAlloc(), _size(0), _root(NULL), _leaf(NULL) {
         _leaf = _nodeAlloc.allocate(1);
         _nodeAlloc.construct(_leaf, Node());
         insert(first, last);
@@ -437,9 +437,12 @@ protected:
             oldRoot->left = NULL;
         newRoot->right = oldRoot;
         newRoot->parent = oldRoot->parent;
-        if (newRoot->parent)
+        if (oldRoot->parent)
         {
-            newRoot->parent->right = oldRoot->parent;
+            if (oldRoot->parent->left == oldRoot)
+                oldRoot->parent->left = newRoot;
+            else
+                oldRoot->parent->right = newRoot;
         }
         oldRoot->parent = newRoot;
         adjustHeight(oldRoot);
@@ -461,9 +464,12 @@ protected:
         }
         newRoot->left = oldRoot;
         newRoot->parent = oldRoot->parent;
-        if (newRoot->parent)
+        if (oldRoot->parent)
         {
-            newRoot->parent->left = oldRoot->parent;
+            if (oldRoot->parent->left == oldRoot)
+                oldRoot->parent->left = newRoot;
+            else
+                oldRoot->parent->right = newRoot;
         }
         oldRoot->parent = newRoot;
         adjustHeight(oldRoot);
@@ -490,10 +496,14 @@ protected:
                 {
                     inserted = rotateRight(inserted);
                 }
+                if (!flag) {
+                    for (Node *tmp = inserted->parent; tmp != NULL; tmp = tmp->parent)
+                        adjustHeight(tmp);
+                }
             }
             else if (ratioNode(inserted) > 1)
             {
-                if (inserted->left->right && inserted->left->right->height > 0)
+                if (inserted->right->left && inserted->right->left->height > 0)
                 {
                     inserted->right = rotateRight(inserted->right);
                     inserted = rotateLeft(inserted);
@@ -502,6 +512,10 @@ protected:
                 {
                     inserted = rotateLeft(inserted);
                 }
+                if (!flag) {
+                    for (Node *tmp = inserted->parent; tmp != NULL; tmp = tmp->parent)
+                        adjustHeight(tmp);
+                }
             }
             if (flag)
                 break ;
@@ -509,8 +523,11 @@ protected:
         }
         return (inserted); // return le nouveau _root
     }
-
+#ifdef DEBUG
+public:
+#else
 private:
+#endif
     Node *_root;
     Node *_leaf;
     size_type _size;

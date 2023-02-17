@@ -58,7 +58,6 @@ public:
     //operators
     ft::vector<T, allocator_type> &operator=(ft::vector<T, allocator_type> const &rhs) {
         clear();
-        size_type tmp_capacity = _capacity;
         for (const_iterator it = rhs.begin(); it != rhs.end(); it++)
             this->push_back(*it);
         /*_alloc.deallocate(_p, _capacity);
