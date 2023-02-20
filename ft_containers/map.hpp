@@ -393,7 +393,9 @@ protected:
                 tmpNode = node->parent;
         }
         _alloc.destroy(&node->data);
+    //    _alloc.deallocate(&node->data, 1);
         _nodeAlloc.destroy(node);
+        _nodeAlloc.deallocate(node, 1);
         Node *tmp = tmpNode;
         while (tmp != NULL)
         {
@@ -402,7 +404,9 @@ protected:
         }
         _size--;
         if (!_size) {
-            _nodeAlloc.deallocate(_root, 1);
+            //_alloc.destroy(&_root->data);
+            //_nodeAlloc.destroy(_root);
+            //_nodeAlloc.deallocate(_root, 1);
             return (_leaf);
         }
         return (tmpNode);
