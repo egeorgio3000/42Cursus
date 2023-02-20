@@ -39,10 +39,12 @@ int main() {
      ftmap.insert(ft::pair<int, std::string>(5, "cinq"));
     print_map(ftmap);
     ftmap.insert(ft::pair<int, std::string>(1, "un"));
-/*    print_map(ftmap);
+    print_map(ftmap);
     ftmap.insert(ft::pair<int, std::string>(9, "neuf"));
     print_map(ftmap);
-    ftmap.insert(ft::pair<int, std::string>(3, "trois"));
+    ftmap.erase(5);
+    print_map(ftmap);
+/*   ftmap.insert(ft::pair<int, std::string>(3, "trois"));
     print_map(ftmap);
     ftmap.insert(ft::pair<int, std::string>(4, "quatre"));
     print_map(ftmap);
@@ -55,10 +57,10 @@ int main() {
     ftmap.insert(ft::pair<int, std::string>(7, "sept"));
     print_map(ftmap);
     ftmap.erase(12);
-    print_map(ftmap); */
-    //ftmap.erase(3);
-    //print_map(ftmap);
-    //ftmap.erase(2);
-    //print_map(ftmap);
+    print_map(ftmap);
+    ftmap.erase(3);
+    print_map(ftmap);
+    ftmap.erase(2);
+    print_map(ftmap);*/
     return 0;
 }

@@ -120,16 +120,21 @@ public:
     }
 
     iterator erase (iterator pos ) {
+        int flag = 0;
+        if (_root == pos.getNode())
+            flag = 1;
         iterator ret = pos;
         ret++;
         Node *node = deleteNode(pos.getNode());
+        std::cout << node->parent << std::endl;
+        if (flag)
+            _root = node;
+        std::cout << _root << " " << node << std::endl;
         _root = balanceTree(node);
         return (ret);
     }
 
     iterator erase( iterator first, iterator last ) {
-        iterator ret = last;
-        ret++;
         while (first != last) {
             first = erase(first);
         }
@@ -144,10 +149,7 @@ public:
         return 1;
     }
 
-    void clear() {
-        while (_size)
-            deleteNode(_root);
-    }
+    void clear() { erase(begin(), end()); }
 
     void swap(map& other) {
         ft::swap(_root, other._root);
@@ -351,7 +353,6 @@ protected:
         if (!node || node == _leaf) {
             return _root;
         }
-        //_alloc.destroy(node->data);
         Node *tmpNode = node;
         if (!node->left) {
             if (node != _root && node->parent->right == node) { //connexion du parent avec l'enfant
@@ -363,8 +364,9 @@ protected:
                 node->right->parent = node->parent; // connexion de l'enfant avec le parent
             if (tmpNode->right && tmpNode->right != _leaf)
                 tmpNode = tmpNode->right;
-            else
+            else {
                 tmpNode = tmpNode->parent;
+            }
         }
         else if (!node->right) {
             if (node != _root && node->parent->right == node) { //connexion du parent avec l'enfant
@@ -383,9 +385,13 @@ protected:
             while (node->right) {
                 node = node->right;
             }
+            _alloc.destroy(&tmpNode->data);
             _alloc.construct(&tmpNode->data, node->data);
             if (node->left) {
-                node->parent->right = node->left;
+                if (node == node->parent->left)
+                    node->parent->left = node->left;
+                else
+                    node->parent->right = node->left;
                 node->left->parent = node->parent;
                 tmpNode = node->left;
             }
@@ -487,8 +493,9 @@ protected:
         while (inserted)
         {
             // std::cout << ratioNode(inserted) << " = " << inserted->height << " - " << inserted->left->height << " - (" << inserted->height << " - (-1) )" << std::endl;
-            if (inserted == _root)
+            if (!inserted->parent) {
                 flag = true;
+            }
             if (ratioNode(inserted) < -1)
             {
                 if (inserted->left->right && inserted->left->right->height > 0)
