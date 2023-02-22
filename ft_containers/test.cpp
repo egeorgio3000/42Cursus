@@ -44,7 +44,7 @@ int main() {
     print_map(ftmap);
     ftmap.erase(5);
     print_map(ftmap);
-/*   ftmap.insert(ft::pair<int, std::string>(3, "trois"));
+   ftmap.insert(ft::pair<int, std::string>(3, "trois"));
     print_map(ftmap);
     ftmap.insert(ft::pair<int, std::string>(4, "quatre"));
     print_map(ftmap);
@@ -61,6 +61,8 @@ int main() {
     ftmap.erase(3);
     print_map(ftmap);
     ftmap.erase(2);
-    print_map(ftmap);*/
+    print_map(ftmap);
+    ftmap.erase(2);
+    print_map(ftmap);
     return 0;
 }

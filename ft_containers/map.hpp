@@ -55,14 +55,16 @@ public:
     }
 
     template <class InputIterator>
-    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _comp(comp), _alloc(alloc), _nodeAlloc(), _size(0), _root(NULL), _leaf(NULL) {
+    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _root(NULL), _leaf(NULL), _size(0), _alloc(alloc), _nodeAlloc(), _comp(comp) {
         _leaf = _nodeAlloc.allocate(1);
         _nodeAlloc.construct(_leaf, Node());
         insert(first, last);
     }
 
-    map(const ft::map<key_type, mapped_type, key_compare, allocator_type> &src)
+    map(const ft::map<key_type, mapped_type, key_compare, allocator_type> &src) : _root(NULL), _size(0), _alloc(Allocator()), _nodeAlloc()
     {
+        _leaf = _nodeAlloc.allocate(1);
+        _nodeAlloc.construct(_leaf, Node());
         if (this != &src)
             *this = src;
     }
@@ -79,8 +81,6 @@ public:
             _alloc = rhs._alloc;
             _nodeAlloc = rhs._nodeAlloc;
             _comp = rhs._comp;
-            _leaf = _nodeAlloc.allocate(1);
-            _nodeAlloc.construct(_leaf, Node());
             _size = 0;
             insert(rhs.begin(), rhs.end());
         }
@@ -126,10 +126,8 @@ public:
         iterator ret = pos;
         ret++;
         Node *node = deleteNode(pos.getNode());
-        std::cout << node->parent << std::endl;
         if (flag)
             _root = node;
-        std::cout << _root << " " << node << std::endl;
         _root = balanceTree(node);
         return (ret);
     }
@@ -204,7 +202,7 @@ public:
         return (it->second);
     }
 
-    reference operator[](const key_type &key) { return insertNode(ft::make_pair<key_type, mapped_type>(key, T()))->data.second; }
+    reference operator[](const key_type &key) { return insert(ft::make_pair<key_type, mapped_type>(key, T())).first->second; }
 
     //Capacity
 
@@ -260,7 +258,7 @@ protected:
 
     //AVLtree functions
 
-    Node *findNode(key_type const &key) {
+    Node *findNode(key_type const &key) const {
         if (empty()) {
             return (_leaf);
         }
@@ -395,8 +393,13 @@ protected:
                 node->left->parent = node->parent;
                 tmpNode = node->left;
             }
-            else
+            else {
+                if (node == node->parent->left)
+                    node->parent->left = NULL;
+                else
+                    node->parent->right = NULL;
                 tmpNode = node->parent;
+            }
         }
         _alloc.destroy(&node->data);
     //    _alloc.deallocate(&node->data, 1);

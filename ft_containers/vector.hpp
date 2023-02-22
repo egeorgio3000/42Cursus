@@ -300,17 +300,17 @@ private:
 // non member functions
 
 template< class T, class Alloc >
-bool operator==( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator==( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lhs.size() == rhs.size() && equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
-bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !equal(lhs.begin(), lhs.end(), rhs.begin()); }
-template< class T, class Alloc >
-bool operator<=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
-template< class T, class Alloc >
-bool operator>=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) || equal(lhs.begin(), lhs.end(), rhs.begin()); }
+bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lhs.size() != rhs.size() || !equal(lhs.begin(), lhs.end(), rhs.begin()); }
 template< class T, class Alloc >
 bool operator<( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 template< class T, class Alloc >
 bool operator>( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+template< class T, class Alloc >
+bool operator<=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lhs < rhs || lhs == rhs; }
+template< class T, class Alloc >
+bool operator>=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lhs > rhs || lhs == rhs; }
 
 template< class T, class Alloc >
 void swap( ft::vector<T,Alloc>& lhs, ft::vector<T,Alloc>& rhs ) { lhs.swap(rhs); }
