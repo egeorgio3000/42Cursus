@@ -46,7 +46,7 @@ public:
         InputIterator it = first;
         for(; it != last; it++)
             this->push_back(*it);
-        _capacity = last - first;
+        _capacity = &(*last) - &(*first);
     }
     
     vector(ft::vector<T, allocator_type> const& src) : _alloc(src.get_allocator()), _size(0), _capacity(0), _p(NULL)  {
@@ -139,7 +139,11 @@ public:
 
     template <class InputIterator>
     iterator insert(iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
-        size_type n = last - first;
+        size_type n = 0;
+        while (last != first) {
+            last--;
+            n++;
+        }
         size_type pos = (position - _p);
         if (n && 2 * _size < n + _size) {
             reserve(n + _size);
@@ -154,6 +158,7 @@ public:
         for (; ptrEnd != ptrPos + n - 1; --ptrEnd) {
             _alloc.construct(ptrEnd, *(ptrEnd - n));
             _alloc.destroy(ptrEnd - n);
+            
         }
         for (size_type i = 0; i < n; i++) {
             _alloc.construct(ptrPos + i, *first);
@@ -306,7 +311,7 @@ bool operator!=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs 
 template< class T, class Alloc >
 bool operator<( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
 template< class T, class Alloc >
-bool operator>( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()); }
+bool operator>( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return !lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()) && lhs != rhs; }
 template< class T, class Alloc >
 bool operator<=( const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs ) { return lhs < rhs || lhs == rhs; }
 template< class T, class Alloc >

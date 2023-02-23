@@ -55,7 +55,7 @@ public:
     }
 
     template <class InputIterator>
-    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _root(NULL), _leaf(NULL), _size(0), _alloc(alloc), _nodeAlloc(), _comp(comp) {
+    map(InputIterator first, InputIterator last, const key_compare &comp = Compare(), const allocator_type &alloc = Allocator()) : _root(NULL), _size(0), _alloc(alloc), _nodeAlloc(), _comp(comp) {
         _leaf = _nodeAlloc.allocate(1);
         _nodeAlloc.construct(_leaf, Node());
         insert(first, last);
@@ -113,8 +113,6 @@ public:
         ft::pair<iterator, bool> pairNode;
         while (first != last) {
             pairNode = insert(*first);
-            if (!pairNode.second)
-                break;
             first++;
         }
     }
@@ -403,7 +401,7 @@ protected:
         }
         _alloc.destroy(&node->data);
     //    _alloc.deallocate(&node->data, 1);
-        _nodeAlloc.destroy(node);
+    //    _nodeAlloc.destroy(node);
         _nodeAlloc.deallocate(node, 1);
         Node *tmp = tmpNode;
         while (tmp != NULL)

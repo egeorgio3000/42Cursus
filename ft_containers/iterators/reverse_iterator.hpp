@@ -25,7 +25,7 @@ class reverse_iterator {
     //operators
     template <typename U>
     reverse_iterator &operator=(reverse_iterator<U> const &other) { 
-        _it(other);
+        _it = other.base();
         return (*this);
     }
         //comparaison
@@ -110,6 +110,17 @@ class reverse_iterator {
     Iter _it;
 
 };
+
+template <class Iter>
+reverse_iterator<Iter>
+operator+(typename reverse_iterator<Iter>::difference_type n, const reverse_iterator<Iter>& it) { return it.base() - n; }
+
+
+template <class Iterator>
+typename reverse_iterator<Iterator>::difference_type
+operator-(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) { return rhs.base() - lhs.base(); }
+
 }
+
 
 #endif
