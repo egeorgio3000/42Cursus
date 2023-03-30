@@ -18,6 +18,9 @@ RUN apk update ; \
     curl \
     tar 
 
+RUN apk add --no-cache mariadb-client \
+    mysql-client \
+
 # Download and install WordPress
 RUN mkdir /var/www && \
     mkdir /var/www/html
