@@ -47,7 +47,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      o: bind
+      o: bind #bind mount for persisting datas
       device: /home/egeorgio/data/wp
   db_volume:
     driver: local
