@@ -21,6 +21,6 @@ fclean: clean
 	@- docker volume rm $$(docker volume ls -q)
 	@ rm -rf /home/$(USER)/data/wp
 	@ rm -rf /home/$(USER)/data/db
-	@ docker system prune -af
+	@ docker system prune -af > /dev/null
 
 re: fclean all
