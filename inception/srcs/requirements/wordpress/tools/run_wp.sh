@@ -1,5 +1,10 @@
 #!/bin/sh
 
+while ! mariadb -h$MYSQL_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD $WP_DATABASE_NAME > /dev/null; do
+	echo "[ WORDPRESS ] DATABASE NOT READY YET, WAITING..."
+	sleep 4
+done
+
 if [ -f ./wp_config]
 then
     echo "wordpress already installed"
