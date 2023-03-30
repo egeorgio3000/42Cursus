@@ -136,7 +136,7 @@ public:
         _size += n;
         return (iterator(_p + pos));
     }
-
+vector.insert(begin(), 5, 5);
     template <class InputIterator>
     iterator insert(iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
         size_type n = 0;
